@@ -3,6 +3,7 @@ import numpy as np
 import random
 from PIL import Image, ImageDraw, ImageFont
 import time
+from ASCIIArt import TextASCII_to_ndarray
 
 class Stat_objs:
     # def __init__(self,row,col):
@@ -47,18 +48,8 @@ class Stat_objs:
 
     def put_coins(self):
         
-        texts=[["? ", " AG "," << "," $ ","GO" ," + ",],
-                ["ARCHIT","GOOD", "YEAH"]]
-        text=np.array(texts[0])
-        k=random.randint(0,text.size-1)
-        # print(text.size)
-        myfont = ImageFont.truetype("./fonts/arial.ttf", 8)
-        size = myfont.getsize(text[k])
-        img = Image.new("1",size,"black")
-        draw = ImageDraw.Draw(img)
-        draw.text((0, 0), text[k], "white", font=myfont)
-        pixels = np.array(img, dtype=np.uint8)
-        chars = np.array([' ','$'], dtype="U1")[pixels]
+        k=random.randint(1,5)
+        chars=TextASCII_to_ndarray('./coin'+str(k)+'.txt')
         # print(chars)
         # strings = chars.view('U' + str(chars.shape[1])).flatten()
         # print( "\n".join(strings))

@@ -76,9 +76,23 @@ empty=np.ndarray([5,5],dtype='U50')
                         bullet.set_col(old_col+BULLET_VEL_X)
 '''
 
-
+cnt=0
+chararray=[]
 with open("./boss enemy") as obj:
-    for line in obj:
-        print('#'+line)
-				# str1=line.strip('\n')
+    for text in obj:
+        cnt+=1
+        line=text.strip('\n')
+        print(list(line))
+        chararray.append(list(line))
+print(chararray)
+max_len = np.array([len(array) for array in chararray]).max()
+print(max_len)
+default_value=' '
+b= [np.pad(array, (0, max_len - len(array)), mode='constant', constant_values=default_value) for array in chararray]
+bossenemy=np.asarray(b,dtype='U1')
+print(bossenemy.shape)
+for a in bossenemy:
+    for b in a:
+        print(b,end='')
+    print()
 # print(str1)

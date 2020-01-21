@@ -3,6 +3,9 @@ import numpy as np
 import random
 from PIL import Image, ImageDraw, ImageFont
 import time
+from ASCIIArt import TextASCII_to_ndarray
+
+
 
 class Spec_objs:
     def __init__(self,row,col,shape):
@@ -33,5 +36,13 @@ class Bullet(Spec_objs):
 
     def get_conc_obj(self):
         return self.__cncld_obj
+
+
+
+class Magnet(Spec_objs):
+    def __init__(self,row,col):
+        shape=TextASCII_to_ndarray("magnet.txt")
+        super().__init__(row,col,shape)
+
 
 
