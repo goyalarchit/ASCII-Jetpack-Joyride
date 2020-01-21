@@ -45,4 +45,42 @@ class Magnet(Spec_objs):
         super().__init__(row,col,shape)
 
 
+class Coins(Spec_objs):
+    def __init__(self,row,col):
+        k=random.randint(1,5)
+        shape=TextASCII_to_ndarray('./coin'+str(k)+'.txt')
+        super().__init__(row,col,shape)
 
+
+class Firebeams(Spec_objs):
+    def __init__(self,row,col):
+        shape=  [     [   [ "O", " " , " " , " ", " "  ], 
+                        [ " ", "*" , " " , " ", " "  ],
+                        [ " ", " " , "*" , " ", " "  ],
+                        [ " ", " " , " " , "*", " "  ],
+                        [ " ", " " , " " , " ", "O"  ]],
+                    [   [ " ", " " , " " , " ", "O"  ], 
+                        [ " ", " " , " " , "*", " "  ],
+                        [ " ", " " , "*" , " ", " "  ],
+                        [ " ", "*" , " " , " ", " "  ],
+                        [ "O", " " , " " , " ", " "  ]],
+                    [   [ " ", " " , "O" , " ", " "  ], 
+                        [ " ", " " , "*" , " ", " "  ],
+                        [ " ", " " , "*" , " ", " "  ],
+                        [ " ", " " , "*" , " ", " "  ],
+                        [ " ", " " , "O" , " ", " "  ]],
+                    [   [ " ", " " , " " , " ", " "  ], 
+                        [ " ", " " , " " , " ", " "  ],
+                        [ "O", "*" , "*" , "*", "O"  ],
+                        [ " ", " " , " " , " ", " "  ],
+                        [ " ", " " , " " , " ", " "  ]],
+                    [   [ "O", "*" , "*" , "*", "O"  ],
+                        [ " ", " " , " " , " ", " "  ], 
+                        [ " ", " " , " " , " ", " "  ],
+                        [ " ", " " , " " , " ", " "  ],
+                        [ "O", "*" , "*" , "*", "O"  ]],
+                ]
+        shape_np=np.asarray(shape,dtype= 'U1',)
+        random.seed(time.time())
+        fin_shape=shape_np[random.randint(0,106)%shape_np.shape[0]]
+        super().__init__(row,col,fin_shape)

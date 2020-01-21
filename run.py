@@ -101,8 +101,9 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(31,1000,168)
+b=Board(31,1000,134)
 b.create_board()
+b.add_magnet_to_arena(2,170)
 create_arena(b)
 player=Mando(0,2,1)
 b.spawn_mando(player)
@@ -117,7 +118,8 @@ while True and (player.die is False) is True:
     signal.alarm(TIMEOUT)
     gameplay()
     b.simulate_bullet_motion()
+    b.magnet_action(player)
     signal.alarm(0)
     player.move(0,1,b)
-    time.sleep(1/50)
+    # time.sleep(1/1000)
     

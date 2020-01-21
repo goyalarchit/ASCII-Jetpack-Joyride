@@ -96,13 +96,13 @@ class Board:
     
     def add_magnet_to_arena(self,row,col):
         self.magnets.append(Magnet(row,col))
-        shape=self.magnets[self.magnets.__len__-1].get_shape()
+        shape=self.magnets[int(self.magnets.__len__())-1].get_shape()
         self.matrix[row:row+shape.shape[0],col:col+shape.shape[1]]=shape
 
     def magnet_action(self,player):
         for magnet in self.magnets:
-            if (magnet.get_col>=self.strt_col) and (magnet.get_col<=self.end_col):
-                dx=magnet.get_col-player.x_cor/2
+            if (magnet.get_col()>=self.strt_col) and (magnet.get_col()<=self.end_col):
+                dx=int((magnet.get_col()-player.x_cor)/4)
                 player.move(dx,0,self)
             else:
                 pass
