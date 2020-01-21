@@ -38,8 +38,12 @@ def create_arena(board_obj):
             check = board_obj.matrix[s_row:s_row+chars.shape[0],s_col:s_col+chars.shape[1]]
             if np.array_equal(check,empty) is False :
                 continue
-            try : 
-                board_obj.matrix[s_row:s_row+chars.shape[0],s_col:s_col+chars.shape[1]]=chars 
+            try :
+                print(chars.shape) 
+                t=board_obj.set_objmatrix(s_row,s_col,chars.shape)
+                # print(t)
+                board_obj.matrix[s_row:s_row+chars.shape[0],s_col:s_col+chars.shape[1]]=chars
+
             except :    
                 continue        
             s_col+=chars.shape[1]+5

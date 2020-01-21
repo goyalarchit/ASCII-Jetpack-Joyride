@@ -38,8 +38,8 @@ class Stat_objs:
                             [ "O", "*" , "*" , "*", "O"  ]],
                     ]
         self._shape_np=np.asarray(self.__shape,dtype= 'U1',)
-        print(self._shape_np.shape)
-        print()
+        # print(self._shape_np.shape)
+        # print()
         random.seed(time.time())
         return self._shape_np[random.randint(0,106)%self._shape_np.shape[0]]
         

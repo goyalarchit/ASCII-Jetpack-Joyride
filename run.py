@@ -29,6 +29,8 @@ from mando import Mando
 import signal
 from getch import _getChUnix as getChar
 from alarmexception import AlarmException
+from colorama import Fore,Back
+
 
 TIMEOUT = 1
 def noinput(signum,frame):
@@ -85,6 +87,8 @@ def gameplay():
     if char == 'w':
         dx=0
         dy=-4
+    if char == 'b':
+        b.add_bullet_to_arena(player.y_cor+1,player.x_cor+1)
     if char == '\0':
         return
     # print(char)
@@ -97,21 +101,23 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(30,1000,110)
+b=Board(31,1000,168)
 b.create_board()
 create_arena(b)
 player=Mando(0,2,1)
 b.spawn_mando(player)
 
 while True and (player.die is False) is True:
-    print("Coins : "+str(player.coins))
-    print("Lives : "+str(player.lives))
-    print("lives : "+str(player.lives))
+    os.system('clear')
+    print(Back.BLACK+"Coins : "+str(player.coins))
+    print(Back.BLACK+"Lives : "+str(player.lives))
+    print(Back.BLACK+"lives : "+str(player.lives))
     b.print_grid()
     sys.stdout.flush()
     signal.alarm(TIMEOUT)
     gameplay()
+    b.simulate_bullet_motion()
     signal.alarm(0)
-    player.move(1,1,b)
-    time.sleep(1/30)
+    player.move(0,1,b)
+    time.sleep(1/50)
     
