@@ -1,5 +1,4 @@
 import os
-from PIL import Image, ImageDraw, ImageFont
 from colorama import Fore, Back , Style
 import config
 import numpy as np
@@ -49,7 +48,7 @@ class Board:
         return self.__objectmatrix[row,col].split(',')
     
     def spawn_mando(self,player):#
-        self.matrix[player.y_cor:player.y_cor+3,player.x_cor:player.x_cor+3]=player.shape
+        self.matrix[player.get_ycor():player.get_ycor()+3,player.get_xcor():player.get_xcor()+3]=player.get_shape()
 
 
 #jump higher
@@ -57,7 +56,7 @@ class Board:
         self.bullets.append(Bullet(row,col))
 
 
-    def simulate_bullet_motion(self):
+    def simulate_bullet_motion(self,bossenemy):
          
         empty=np.ndarray([5,5],dtype='U50')
         empty.fill(' ')
@@ -77,6 +76,14 @@ class Board:
                         col_cell=self.get_objmatrix(old_row,old_col+x)
                         print(col_cell)
                         self.matrix[int(col_cell[0]):int(col_cell[0])+5,int(col_cell[1]):int(col_cell[1])+5] = empty
+                        bul_del=bullet
+                        self.bullets.remove(bullet)
+                        del bul_del
+                        break
+                    elif self.matrix[old_row,old_col+x ] in ['l','<','(','@','\''] :
+                        bossenemy.dec_lives()
+                        if bossenemy.get_lives()==0:
+                            bossenemy.died()
                         bul_del=bullet
                         self.bullets.remove(bullet)
                         del bul_del
@@ -102,10 +109,18 @@ class Board:
     def magnet_action(self,player):
         for magnet in self.magnets:
             if (magnet.get_col()>=self.strt_col) and (magnet.get_col()<=self.end_col):
-                dx=int((magnet.get_col()-player.x_cor)/4)
+                dx=int((magnet.get_col()-player.get_xcor())/4)
                 player.move(dx,0,self)
             else:
                 pass
+
+    def spwan_boss_enemy_to_arena(self,bossenemy):
+        shape=bossenemy.get_shape()
+        self.matrix[bossenemy.get_ycor():bossenemy.get_ycor()+shape.shape[0],bossenemy.get_xcor():bossenemy.get_xcor()+shape.shape[1]]=shape
+
+    def spwan_captured_baby_yoda_to_arena(self,baby_yoda):
+        shape=baby_yoda.get_shape()
+        self.matrix[baby_yoda.get_ycor():baby_yoda.get_ycor()+shape.shape[0],baby_yoda.get_xcor():baby_yoda.get_xcor()+shape.shape[1]]=shape
 
 if __name__ == "__main__":
     Board = Board(30,160,160)

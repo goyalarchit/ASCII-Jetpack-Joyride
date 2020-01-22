@@ -30,6 +30,8 @@ import signal
 from getch import _getChUnix as getChar
 from alarmexception import AlarmException
 from colorama import Fore,Back
+from enemy import BossEnemy
+from yoda import Yoda
 
 
 TIMEOUT = 1
@@ -88,11 +90,14 @@ def gameplay():
         dx=0
         dy=-4
     if char == 'b':
-        b.add_bullet_to_arena(player.y_cor+1,player.x_cor+1)
+        b.add_bullet_to_arena(player.get_ycor()+1,player.get_xcor()+1)
+    if char == ' ':
+        player.try_sheild()
     if char == '\0':
         return
     # print(char)
     # time.sleep(1)
+    Bossenemy.simulate_fight(player,b)
     player.move(dx,dy,b)
     # return {'dx':dx,'dy':dy}
 
@@ -101,25 +106,37 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(31,1000,134)
+b=Board(31,200,134)
 b.create_board()
-b.add_magnet_to_arena(2,170)
+# b.add_magnet_to_arena(2,770)
 create_arena(b)
-player=Mando(0,2,1)
+player=Mando(0,2)
 b.spawn_mando(player)
-
-while True and (player.die is False) is True:
+Bossenemy = BossEnemy(0,b.col-50)
+b.spwan_boss_enemy_to_arena(Bossenemy)
+Baby_yoda=Yoda(b.row-4,b.col-11)
+b.spwan_captured_baby_yoda_to_arena(Baby_yoda)
+vel_x=1
+while True :
     os.system('clear')
-    print(Back.BLACK+"Coins : "+str(player.coins))
-    print(Back.BLACK+"Lives : "+str(player.lives))
-    print(Back.BLACK+"lives : "+str(player.lives))
+    print(Back.BLACK+"Coins : "+str(player.get_coins()))
+    print(Back.BLACK+"Your Lives : "+str(player.get_lives()))
+    print(Back.BLACK+"Boss Enemy Lives : "+str(Bossenemy.get_lives()))
     b.print_grid()
     sys.stdout.flush()
     signal.alarm(TIMEOUT)
     gameplay()
-    b.simulate_bullet_motion()
+    b.simulate_bullet_motion(Bossenemy)
     b.magnet_action(player)
     signal.alarm(0)
-    player.move(0,1,b)
-    # time.sleep(1/1000)
+    if(b.end_col==b.col):
+        vel_x=0
+    player.move(vel_x,1,b)
+    if Bossenemy.is_dead() is True:
+        print('You Won')
+        exit()
+    elif player.is_dead() is True:
+        print('You Lose')
+        exit()
+    time.sleep(1/30)
     

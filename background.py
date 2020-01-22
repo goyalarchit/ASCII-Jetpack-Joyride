@@ -25,7 +25,7 @@ def create_arena(board_obj):
     row=[0,9,18]
     for i in range(3):
         s_col=0
-        while s_col<board_obj.col-100:
+        while s_col<board_obj.col-board_obj.frame_size-10:
             if random.randint(0,13)%2 == 0 :
             # if s_col%2 == 0 :
                 chars=so.put_coins()
@@ -40,8 +40,7 @@ def create_arena(board_obj):
                 continue
             try :
                 print(chars.shape) 
-                t=board_obj.set_objmatrix(s_row,s_col,chars.shape)
-                # print(t)
+                board_obj.set_objmatrix(s_row,s_col,chars.shape)
                 board_obj.matrix[s_row:s_row+chars.shape[0],s_col:s_col+chars.shape[1]]=chars
 
             except :    

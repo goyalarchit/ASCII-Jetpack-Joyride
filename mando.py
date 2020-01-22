@@ -6,47 +6,130 @@ import collections
 # # print("No = "+ str(l.('$')) )  
 import os
 from character import Person
+import time
 
 class Mando(Person):
 
-    def __init__(self,y_cor,x_cor,dir):
-        Person.__init__(self,y_cor,x_cor,dir)
-        self.shape=[ [ "/" , "0" , "\\"  ], [ " " , "|" ," "], [ "/" , "|", "\\" ]]
-        self.coins=0
-        self.shield=0
+    def __init__(self,y_cor,x_cor):
+        shape=[  [ [ "/" , "0" , "\\"  ], [ " " , "|" ," "], [ "/" , "|", "\\" ]],
+                        [ [ "\033[45m/\033[0m" , "\033[45m0\033[0m" , "\033[45m\\\033[0m"  ],
+                         [ "\033[45m \033[0m" , "\033[45m|\033[0m" ,"\033[45m \033[0m"], 
+                         [ "\033[45m/\033[0m" , "\033[45m|\033[0m", "\033[45m\\\033[0m" ]]]
+        Person.__init__(self,y_cor,x_cor,shape)
+        self.__coins=0
+        self.__shield_available=1
+        self.__shield_active=0
+        self.__last_used_time=time.time()
+        self.__shield_strt_time=0
+
+    def get_coins(self):
+        return self.__coins
+
+    def inc_coins(self,collected):
+        self.__coins+=collected
+
+    def get_shape(self):
+        return self._shape[self.__shield_active]
 
     def move(self,dx,dy,board_obj):
-        empty=np.ndarray([3,3],dtype='U1')
+        empty=np.ndarray([3,3],dtype='U50')
         empty.fill(' ')
-        if self.y_cor+dy<0 or self.y_cor+dy+3>30 :
+        x_cor=self.get_xcor()
+        y_cor=self.get_ycor()
+        if y_cor+dy<0 or y_cor+dy+3>board_obj.row-2 :
             dy=0
-        if self.x_cor+dx<board_obj.strt_col :
-            self.x_cor=board_obj.strt_col
-        if self.x_cor+dx+3>board_obj.end_col :
+        if x_cor+dx<board_obj.strt_col :
+            self.set_xcor(board_obj.strt_col-x_cor)
+        if x_cor+dx+3>board_obj.end_col :
             dx=0
+        self.shield_book_keeping()
+        # check=board_obj.matrix[y_cor+dy:y_cor+dy+3,x_cor+dx:x_cor+dx+3]
+        # # print(check)
+        # if  np.array_equal(check,empty) is False :
+        #     check1=check.tolist()
+        #     if (self.__shield_active==0) and ((sum(i.count('O') for i in check1) + sum(i.count('*') for i in check1)) > 0):
+        #         self.dec_lives()
+        #         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
+        #         self.set_xcor(board_obj.strt_col+5-x_cor)
+        #         self.set_ycor(1-y_cor)
+        #         dx=dy=0
+        #         if self.get_lives() is 0:
+        #             self.died()
+        #     if sum(i.count('$') for i in check1) > 0:
+        #         self.inc_coins(sum(i.count('$') for i in check1))
+        if self.check_collision(dx,dy,board_obj) is False:
+            board_obj.matrix[self.get_ycor():self.get_ycor()+3,self.get_xcor():self.get_xcor()+3]=empty
+            self.set_ycor(dy)
+            self.set_xcor(dx)
+        board_obj.matrix[self.get_ycor():self.get_ycor()+3,self.get_xcor():self.get_xcor()+3]=self.get_shape()
 
-        check=board_obj.matrix[self.y_cor+dy:self.y_cor+dy+3,self.x_cor+dx:self.x_cor+dx+3]
-        # print(check)
-        if  np.array_equal(check,empty) is False :
-            check1=check.tolist()
-            if (sum(i.count('O') for i in check1) + sum(i.count('*') for i in check1)) > 0 :
-                self.lives-=1
-                board_obj.matrix[self.y_cor:self.y_cor+3,self.x_cor:self.x_cor+3]=empty
-                self.x_cor=board_obj.strt_col+5
-                self.y_cor=1
-                dx=dy=0
-                if self.lives is 0:
-                    self.die=True
-            if sum(i.count('$') for i in check1) > 0:
-                self.coins+=sum(i.count('$') for i in check1)
-        board_obj.matrix[self.y_cor:self.y_cor+3,self.x_cor:self.x_cor+3]=empty
-        self.y_cor+=dy
-        self.x_cor+=dx
-        board_obj.matrix[self.y_cor:self.y_cor+3,self.x_cor:self.x_cor+3]=self.shape
 
+    def check_collision(self,dx,dy,board_obj):
+        empty=np.ndarray([3,3],dtype='U50')
+        empty.fill(' ')
+        flag=False
+        y_cor=self.get_ycor()
+        x_cor=self.get_xcor()
+        if dx!=0:
+            for x in range(1,dx+1):
+                check=board_obj.matrix[y_cor+dy:y_cor+dy+3,x_cor+x:x_cor+x+3]
+                if  np.array_equal(check,empty) is False :
+                    check1=check.tolist()
+                    if (self.__shield_active==0) and ((sum(i.count('O') for i in check1) + sum(i.count('*') for i in check1)) > 0):
+                        flag=True
+                        self.dec_lives()
+                        board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
+                        self.set_xcor(board_obj.strt_col+5-x_cor)
+                        self.set_ycor(1-y_cor)
+                        dx=dy=0
+                        if self.get_lives() is 0:
+                            self.died()
+                    if sum(i.count('$') for i in check1) > 0:
+                        self.inc_coins(sum(i.count('$') for i in check1))
+                    if flag is True :
+                        return True
+        if dy!=0:
+            for y in range(1,dy+1):
+                check=board_obj.matrix[y_cor+y:y_cor+y+3,x_cor+dx:x_cor+dx+3]
+                if  np.array_equal(check,empty) is False :
+                    check1=check.tolist()
+                    if (self.__shield_active==0) and ((sum(i.count('O') for i in check1) + sum(i.count('*') for i in check1)) > 0):
+                        flag=True
+                        self.dec_lives()
+                        board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
+                        self.set_xcor(board_obj.strt_col+5-x_cor)
+                        self.set_ycor(1-y_cor)
+                        dx=dy=0
+                        if self.get_lives() is 0:
+                            self.died()
+                    if sum(i.count('$') for i in check1) > 0:
+                        self.inc_coins(sum(i.count('$') for i in check1))
+                    if flag is True:
+                        return True
+        return flag
+        '''
+        note disappearing beams can be overcome by reprinting the collided beam and removing the respawining place beam 
+        '''
 
-    def check_collision(self):
-        pass
+    def try_sheild(self):
+        if self.__shield_active==1:
+            return
+        if self.__shield_active==0:
+            if self.__shield_available==1:
+                self.__shield_active=1
+                self.__shield_available=0
+                self.__shield_strt_time=int(time.time())
+            
+    def shield_book_keeping(self):
+        if self.__shield_active==1:
+            if (int(time.time())-self.__shield_strt_time)>10:
+                self.__last_used_time=time.time()
+                self.__shield_active=0
+        else:
+            if self.__shield_available==0:
+                if int(time.time()-self.__last_used_time)>60:
+                    self.__shield_available=1
+            
 
     def print_mando(self):  
         pass  

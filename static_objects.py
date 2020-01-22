@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import random
-from PIL import Image, ImageDraw, ImageFont
 import time
 from ASCIIArt import TextASCII_to_ndarray
 
