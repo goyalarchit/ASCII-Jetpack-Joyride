@@ -1,9 +1,5 @@
 import numpy as np
-import collections
-# l=np.chararray([['!','@','#','$'],['!','@','#','$']])
-# print(l)
-# #l=['!','@','#','$']
-# # print("No = "+ str(l.('$')) )  
+import collections 
 import os
 from character import Person
 import time
@@ -21,9 +17,22 @@ class Mando(Person):
         self.__shield_active=0
         self.__last_used_time=time.time()
         self.__shield_strt_time=0
+        empty=np.ndarray((3,3),dtype='U50')
+        empty.fill(' ')
+        self.__cncld_obj=empty
+        self.__speedboost=0
+        self.__speedboost_st=0
+
 
     def get_coins(self):
         return self.__coins
+
+    def set_conc_obj(self,a):
+        self.__cncld_obj=a
+
+    def get_conc_obj(self):
+        return self.__cncld_obj
+
 
     def inc_coins(self,collected):
         self.__coins+=collected
@@ -36,27 +45,13 @@ class Mando(Person):
         empty.fill(' ')
         x_cor=self.get_xcor()
         y_cor=self.get_ycor()
-        if y_cor+dy<0 or y_cor+dy+3>board_obj.row-2 :
+        if y_cor+dy<4 or y_cor+dy+3>board_obj.row-2 :
             dy=0
         if x_cor+dx<board_obj.strt_col :
             self.set_xcor(board_obj.strt_col-x_cor)
         if x_cor+dx+3>board_obj.end_col :
             dx=0
         self.shield_book_keeping()
-        # check=board_obj.matrix[y_cor+dy:y_cor+dy+3,x_cor+dx:x_cor+dx+3]
-        # # print(check)
-        # if  np.array_equal(check,empty) is False :
-        #     check1=check.tolist()
-        #     if (self.__shield_active==0) and ((sum(i.count('O') for i in check1) + sum(i.count('*') for i in check1)) > 0):
-        #         self.dec_lives()
-        #         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
-        #         self.set_xcor(board_obj.strt_col+5-x_cor)
-        #         self.set_ycor(1-y_cor)
-        #         dx=dy=0
-        #         if self.get_lives() is 0:
-        #             self.died()
-        #     if sum(i.count('$') for i in check1) > 0:
-        #         self.inc_coins(sum(i.count('$') for i in check1))
         if self.check_collision(dx,dy,board_obj) is False:
             board_obj.matrix[self.get_ycor():self.get_ycor()+3,self.get_xcor():self.get_xcor()+3]=empty
             self.set_ycor(dy)
@@ -80,12 +75,15 @@ class Mando(Person):
                         self.dec_lives()
                         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
                         self.set_xcor(board_obj.strt_col+5-x_cor)
-                        self.set_ycor(1-y_cor)
+                        self.set_ycor(5-y_cor)
                         dx=dy=0
                         if self.get_lives() is 0:
                             self.died()
                     if sum(i.count('$') for i in check1) > 0:
                         self.inc_coins(sum(i.count('$') for i in check1))
+                    if sum(i.count('#') for i in check1) > 0:
+                        self.__speedboost=3
+                        self.__speedboost_st=time.time()
                     if flag is True :
                         return True
         if dy!=0:
@@ -104,6 +102,9 @@ class Mando(Person):
                             self.died()
                     if sum(i.count('$') for i in check1) > 0:
                         self.inc_coins(sum(i.count('$') for i in check1))
+                    if sum(i.count('#') for i in check1) > 0:
+                        self.__speedboost=3
+                        self.__speedboost_st=time.time()
                     if flag is True:
                         return True
         return flag

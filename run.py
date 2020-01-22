@@ -20,7 +20,6 @@ loop again'''
 
 import os
 from board import Board
-from static_objects import Stat_objs
 from background import create_arena
 import time
 import sys
@@ -95,6 +94,8 @@ def gameplay():
         player.try_sheild()
     if char == '\0':
         return
+    if char=='q':
+        exit()
     # print(char)
     # time.sleep(1)
     Bossenemy.simulate_fight(player,b)
@@ -106,21 +107,24 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(31,200,134)
+b=Board(31,1000,134)
 b.create_board()
-# b.add_magnet_to_arena(2,770)
 create_arena(b)
-player=Mando(0,2)
+player=Mando(5,2)
 b.spawn_mando(player)
 Bossenemy = BossEnemy(0,b.col-51)
 b.spwan_boss_enemy_to_arena(Bossenemy)
 Baby_yoda=Yoda(b.row-5,b.col-11)
 b.spwan_captured_baby_yoda_to_arena(Baby_yoda)
 vel_x=1
+remaining_time=2000
+strt_time=time.time()
 while True :
     os.system('clear')
-    print(Back.BLACK+"Coins : "+str(player.get_coins()))
-    print(Back.BLACK+"Your Lives : "+str(player.get_lives()))
+    remaining_time-=1 #int(time.time())-int(strt_time)
+    print(Back.BLACK+"Coins : "+str(player.get_coins()),end='\t\t\t\t\t\t\t\t\t\t\t\t\t')
+    print(Back.BLACK+"Time : "+str(remaining_time))
+    print(Back.BLACK+"Your Lives : "+str(player.get_lives()),end='\t\t\t\t\t\t\t\t\t\t\t\t\t')
     print(Back.BLACK+"Boss Enemy Lives : "+str(Bossenemy.get_lives()))
     b.print_grid()
     sys.stdout.flush()
@@ -136,7 +140,7 @@ while True :
     if Bossenemy.is_dead() is True:
         print('You Won')
         exit()
-    elif player.is_dead() is True:
+    elif player.is_dead() is True or (remaining_time<=0):
         print('You Lose')
         exit()
     time.sleep(1/30)

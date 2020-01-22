@@ -2,7 +2,7 @@ import os
 from colorama import Fore, Back , Style
 import config
 import numpy as np
-from Special_Objects import Bullet,Magnet,IceBall
+from Special_Objects import Bullet,Magnet,IceBall,SpeedBoost,Coins,Firebeam,Cloud
 class Board:
 
     def __init__(self,row,col,frame_size):
@@ -16,6 +16,10 @@ class Board:
         self.bullets=[]
         self.magnets=[]
         self.ice_balls=[]
+        self.coins=[]
+        self.firebeams=[]
+        self.clouds=[]
+        self.speedboosts=[]
     
     def create_board(self):
         # for i in range(self.row):
@@ -66,7 +70,7 @@ class Board:
             old_row=bullet.get_row()
             old_col=bullet.get_col()
             self.matrix[old_row,old_col]=' '
-            if (old_col>=self.end_col-1) or (old_col>=self.col-10):
+            if (old_col>=self.end_col-1) or (old_col>=self.col-30):
                 self.matrix[old_row,old_col]=' '                
                 bul_del=bullet
                 self.bullets.remove(bullet)
@@ -75,7 +79,6 @@ class Board:
                 for x in range(1,BULLET_VEL_X+1):
                     if self.matrix[old_row,old_col+x ] in ['O','*'] :
                         col_cell=self.get_objmatrix(old_row,old_col+x)
-                        print(col_cell)
                         self.matrix[int(col_cell[0]):int(col_cell[0])+5,int(col_cell[1]):int(col_cell[1])+5] = empty
                         bul_del=bullet
                         self.bullets.remove(bullet)
@@ -129,8 +132,6 @@ class Board:
 
 
     def simulate_iceball_motion(self):
-         
-        
         ICEBALL_VEL_X=-3
         for iceball in self.ice_balls:
             old_row=iceball.get_row()
@@ -149,7 +150,54 @@ class Board:
                 self.matrix[old_row:old_row+shape.shape[0],old_col+ICEBALL_VEL_X:old_col+ICEBALL_VEL_X+shape.shape[1]]=shape
                 iceball.move(ICEBALL_VEL_X)
 
+    def add_speedboost_to_arena(self,row,col):
+        speedboost=SpeedBoost(row,col)
+        self.speedboosts.append(speedboost)
+        fig=speedboost.get_shape()
+        try : 
+            self.set_objmatrix(row,col,fig.shape)
+            self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]=fig
+        except:
+            return
 
+    def add_cloud_to_arena(self,row,col):
+        cloud=Cloud(row,col)
+        self.clouds.append(cloud)
+        fig=cloud.get_shape()
+        try : 
+            self.set_objmatrix(row,col,fig.shape)
+            self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]=fig
+        except:
+            return 
+    def add_coins_to_arena(self,row,col):
+        coin=Coins(row,col)
+        self.coins.append(coin)
+        fig=coin.get_shape()
+        empty=np.ndarray([fig.shape[0],fig.shape[1]],dtype='U50')
+        empty.fill(' ')
+        check = self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]
+        if np.array_equal(check,empty) is False :
+            return False
+        try : 
+            self.set_objmatrix(row,col,fig.shape)
+            self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]=fig
+        except:
+            return True
+
+    def add_firebeam_to_arena(self,row,col):
+        firebeam=Firebeam(row,col)
+        self.firebeams.append(firebeam)
+        fig=firebeam.get_shape()
+        empty=np.ndarray([fig.shape[0],fig.shape[1]],dtype='U50')
+        empty.fill(' ')
+        check = self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]
+        if np.array_equal(check,empty) is False :
+            return False
+        try : 
+            self.set_objmatrix(row,col,fig.shape)
+            self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]=fig
+        except:
+            return True
 if __name__ == "__main__":
     Board = Board(30,160,160)
     Board.create_board()
