@@ -22,12 +22,6 @@ class Board:
         self.speedboosts=[]
     
     def create_board(self):
-        # for i in range(self.row):
-        #     self.element = []
-        #     for j in range(self.col):
-        #         self.element.append(" ")
-        #     self.matrix.append(self.element)
-        # self.grid=np.chararray(self.matrix.shape)
         self.matrix.fill(' ')
         self.__objectmatrix.fill('0,0')
         print(self.__objectmatrix)
@@ -37,11 +31,22 @@ class Board:
         for i in range(self.row):
             for j in range(self.strt_col,self.end_col):
                 if i<self.row-2:
-                    print(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK, end="")
+                    if self.matrix[i][j]=='$':
+                        print(Back.LIGHTBLUE_EX+Fore.LIGHTYELLOW_EX+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                    elif (self.matrix[i][j]=='*' or self.matrix[i][j]=='O') and j < self.col-self.frame_size:
+                        print(Back.LIGHTBLUE_EX+Fore.MAGENTA+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                    elif self.matrix[i][j]=='N':
+                        print(Back.LIGHTBLUE_EX+Fore.RED+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                    elif self.matrix[i][j]=='S':
+                        print(Back.LIGHTBLUE_EX+Fore.BLUE+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                    elif self.matrix[i][j]=='#':
+                        print(Back.LIGHTBLUE_EX+Fore.BLACK+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                    else:
+                        print(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK, end="")
                 else:
                     print(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK, end="")
             print()
-        if self.end_col!=self.col :
+        if self.end_col<=self.col-1 :
             self.strt_col+=1+speedboost
             self.end_col+=1+speedboost
         # print(self.matrix)
@@ -198,9 +203,3 @@ class Board:
             self.matrix[row:row+fig.shape[0],col:col+fig.shape[1]]=fig
         except:
             return True
-if __name__ == "__main__":
-    Board = Board(30,160,160)
-    Board.create_board()
-    #Board.print_grid()
-    # Board.spawn_mando()
-    Board.print_grid()

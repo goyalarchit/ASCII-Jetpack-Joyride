@@ -108,7 +108,7 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(34,200,134)
+b=Board(34,1500,134)
 b.create_board()
 create_arena(b)
 player=Mando(5,2)
@@ -145,5 +145,5 @@ while True :
         print('You Lose')
         exit()
     player.set_vel_y(1)
-    time.sleep(1/30)
+    time.sleep(1/50)
     

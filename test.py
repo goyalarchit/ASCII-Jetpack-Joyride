@@ -7,13 +7,13 @@ a[0:20,:2000]='\033[44mS\033[0m'
 a[20:25,:2000]='\033[42mS\033[0m'
 def printit():
     s=0
-    e=114;
+    e=114
     for i in range(25):
         for j in range(s,e):
             print(a[i][j],end='')
         print()
         if e<2000:
-            s+=1;
+            s+=1
             e+=1
 
 # while True:

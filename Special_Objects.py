@@ -40,14 +40,14 @@ class Bullet(Spec_objs):
 
 class Magnet(Spec_objs):
     def __init__(self,row,col):
-        shape=TextASCII_to_ndarray("./magnet.txt")
+        shape=TextASCII_to_ndarray("./ASCII_ART/magnet.txt")
         super().__init__(row,col,shape)
 
 
 class Coins(Spec_objs):
     def __init__(self,row,col):
         k=random.randint(1,5)
-        shape=TextASCII_to_ndarray('./coin'+str(k)+'.txt')
+        shape=TextASCII_to_ndarray('./ASCII_ART/coin'+str(k)+'.txt')
         super().__init__(row,col,shape)
 
 
@@ -87,7 +87,7 @@ class Firebeam(Spec_objs):
 
 class IceBall(Spec_objs):
     def __init__(self,row,col):
-        shape=TextASCII_to_ndarray('./ice_balls.txt')
+        shape=TextASCII_to_ndarray('./ASCII_ART/ice_balls.txt')
         empty=np.ndarray(shape.shape,dtype='U50')
         empty.fill(' ')
         super().__init__(row,col,shape)
@@ -104,7 +104,7 @@ class IceBall(Spec_objs):
 
 class SpeedBoost(Spec_objs):
     def __init__(self,row,col):
-        shape=TextASCII_to_ndarray('./speedboost.txt')
+        shape=TextASCII_to_ndarray('./ASCII_ART/speedboost.txt')
         empty=np.ndarray(shape.shape,dtype='U50')
         empty.fill(' ')
         super().__init__(row,col,shape)
@@ -114,7 +114,7 @@ class SpeedBoost(Spec_objs):
 
 class Cloud(Spec_objs):
     def __init__(self,row,col):
-        shape=TextASCII_to_ndarray('./cloud.txt')
+        shape=TextASCII_to_ndarray('./ASCII_ART/cloud.txt')
         empty=np.ndarray(shape.shape,dtype='U50')
         empty.fill(' ')
         super().__init__(row,col,shape)

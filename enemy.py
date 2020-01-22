@@ -5,7 +5,7 @@ import time
 
 class BossEnemy(Person):
     def __init__(self,y_cor,x_cor):
-        shape=TextASCII_to_ndarray("./boss enemy.txt")
+        shape=TextASCII_to_ndarray("./ASCII_ART/boss enemy.txt")
         super().__init__(y_cor,x_cor,shape)
         self.__cnt = 0
     
@@ -23,7 +23,7 @@ class BossEnemy(Person):
             x_cor=self.get_xcor()
             y_cor=self.get_ycor()
             board_obj.matrix[:,x_cor:x_cor+shape.shape[1]]=empty
-            new_y=int(player.get_ycor()/2)+2
+            new_y=int(player.get_ycor()/2)+5
             self.set_ycor(new_y)
             y_cor=self._y_cor
             board_obj.matrix[y_cor:y_cor+shape.shape[0],x_cor:x_cor+shape.shape[1]]=shape

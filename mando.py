@@ -60,7 +60,11 @@ class Mando(Person):
         empty.fill(' ')
         x_cor=self.get_xcor()
         y_cor=self.get_ycor()
-        if y_cor+dy<4 or y_cor+dy+3>board_obj.row-2 :
+        if y_cor+dy<4 :
+            dy=0
+        elif y_cor+dy+3>board_obj.row-2 and (y_cor< board_obj.row-5):
+            dy=1
+        elif y_cor==board_obj.row-5 and dy >0:
             dy=0
         if x_cor+dx<board_obj.strt_col :
             self.set_xcor(board_obj.strt_col-x_cor)
@@ -97,7 +101,7 @@ class Mando(Person):
                     if sum(i.count('$') for i in check1) > 0:
                         self.inc_coins(sum(i.count('$') for i in check1))
                     if sum(i.count('#') for i in check1) > 0:
-                        self.__speedboost=3
+                        self.__speedboost=2
                         self.__speedboost_st=time.time()
                     if flag is True :
                         return True
@@ -118,14 +122,14 @@ class Mando(Person):
                     if sum(i.count('$') for i in check1) > 0:
                         self.inc_coins(sum(i.count('$') for i in check1))
                     if sum(i.count('#') for i in check1) > 0:
-                        self.__speedboost=3
+                        self.__speedboost=2
                         self.__speedboost_st=time.time()
                     if flag is True:
                         return True
         return flag
-        '''
-        note disappearing beams can be overcome by reprinting the collided beam and removing the respawining place beam 
-        '''
+
+        # note disappearing beams can be overcome by reprinting the collided beam and removing the respawining place beam 
+        
 
     def try_sheild(self):
         if self.__shield_active==1:
