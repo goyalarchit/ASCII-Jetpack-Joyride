@@ -33,17 +33,17 @@ class Board:
         print(self.__objectmatrix)
 
     
-    def print_grid(self):
+    def print_grid(self,speedboost):
         for i in range(self.row):
             for j in range(self.strt_col,self.end_col):
-                if i<29:
+                if i<self.row-2:
                     print(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK, end="")
                 else:
                     print(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK, end="")
             print()
         if self.end_col!=self.col :
-            self.strt_col+=1
-            self.end_col+=1
+            self.strt_col+=1+speedboost
+            self.end_col+=1+speedboost
         # print(self.matrix)
 
     def set_objmatrix(self,s_row,s_col,shape):

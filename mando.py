@@ -22,6 +22,7 @@ class Mando(Person):
         self.__cncld_obj=empty
         self.__speedboost=0
         self.__speedboost_st=0
+        self.__vel_y=0
 
 
     def get_coins(self):
@@ -33,6 +34,14 @@ class Mando(Person):
     def get_conc_obj(self):
         return self.__cncld_obj
 
+    def set_vel_y(self,a):
+        if a==0:
+            self.__vel_y=a
+        else:
+            self.__vel_y+=a
+
+    def get_vel_y(self):
+        return self.__vel_y
 
     def inc_coins(self,collected):
         self.__coins+=collected
@@ -40,7 +49,13 @@ class Mando(Person):
     def get_shape(self):
         return self._shape[self.__shield_active]
 
+    def get_speedboost(self):
+        return self.__speedboost
+
     def move(self,dx,dy,board_obj):
+        if self.__speedboost!=0:
+            if time.time() - self.__speedboost_st > 10:
+                self.__speedboost=0
         empty=np.ndarray([3,3],dtype='U50')
         empty.fill(' ')
         x_cor=self.get_xcor()
@@ -96,7 +111,7 @@ class Mando(Person):
                         self.dec_lives()
                         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
                         self.set_xcor(board_obj.strt_col+5-x_cor)
-                        self.set_ycor(1-y_cor)
+                        self.set_ycor(5-y_cor)
                         dx=dy=0
                         if self.get_lives() is 0:
                             self.died()

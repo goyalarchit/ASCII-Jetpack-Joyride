@@ -7,8 +7,8 @@ from Special_Objects import Cloud
 
 
 def create_arena(board_obj):
-    board_obj.add_magnet_to_arena(2,770)
-    board_obj.add_speedboost_to_arena(18,40)
+    # board_obj.add_magnet_to_arena(2,770)
+    # board_obj.add_speedboost_to_arena(18,400)
     s_col=0
     while s_col<board_obj.col-70:
         board_obj.add_cloud_to_arena(int(0),s_col)

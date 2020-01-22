@@ -88,6 +88,7 @@ def gameplay():
     if char == 'w':
         dx=0
         dy=-4
+        player.set_vel_y(0)
     if char == 'b':
         b.add_bullet_to_arena(player.get_ycor()+1,player.get_xcor()+1)
     if char == ' ':
@@ -107,7 +108,7 @@ def gameplay():
 
 
 random.seed(time.time)
-b=Board(31,1000,134)
+b=Board(34,200,134)
 b.create_board()
 create_arena(b)
 player=Mando(5,2)
@@ -126,7 +127,7 @@ while True :
     print(Back.BLACK+"Time : "+str(remaining_time))
     print(Back.BLACK+"Your Lives : "+str(player.get_lives()),end='\t\t\t\t\t\t\t\t\t\t\t\t\t')
     print(Back.BLACK+"Boss Enemy Lives : "+str(Bossenemy.get_lives()))
-    b.print_grid()
+    b.print_grid(int(player.get_speedboost()))
     sys.stdout.flush()
     signal.alarm(TIMEOUT)
     gameplay()
@@ -136,12 +137,13 @@ while True :
     signal.alarm(0)
     if(b.end_col==b.col):
         vel_x=0
-    player.move(vel_x,1,b)
+    player.move(vel_x+int(player.get_speedboost()),player.get_vel_y(),b)
     if Bossenemy.is_dead() is True:
         print('You Won')
         exit()
     elif player.is_dead() is True or (remaining_time<=0):
         print('You Lose')
         exit()
+    player.set_vel_y(1)
     time.sleep(1/30)
     
