@@ -2,7 +2,7 @@ import os
 from colorama import Fore, Back , Style
 import config
 import numpy as np
-from Special_Objects import Bullet,Magnet
+from Special_Objects import Bullet,Magnet,IceBall
 class Board:
 
     def __init__(self,row,col,frame_size):
@@ -15,6 +15,7 @@ class Board:
         self.__objectmatrix=np.ndarray((row,col),dtype='U10')
         self.bullets=[]
         self.magnets=[]
+        self.ice_balls=[]
     
     def create_board(self):
         # for i in range(self.row):
@@ -32,9 +33,9 @@ class Board:
         for i in range(self.row):
             for j in range(self.strt_col,self.end_col):
                 if i<29:
-                    print(Back.LIGHTBLUE_EX+self.matrix[i][j], end="")
+                    print(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK, end="")
                 else:
-                    print(Back.LIGHTGREEN_EX+self.matrix[i][j], end="")
+                    print(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK, end="")
             print()
         if self.end_col!=self.col :
             self.strt_col+=1
@@ -121,6 +122,33 @@ class Board:
     def spwan_captured_baby_yoda_to_arena(self,baby_yoda):
         shape=baby_yoda.get_shape()
         self.matrix[baby_yoda.get_ycor():baby_yoda.get_ycor()+shape.shape[0],baby_yoda.get_xcor():baby_yoda.get_xcor()+shape.shape[1]]=shape
+
+
+    def add_iceball_to_arena(self,row,col):
+        self.ice_balls.append(IceBall(row,col))
+
+
+    def simulate_iceball_motion(self):
+         
+        
+        ICEBALL_VEL_X=-3
+        for iceball in self.ice_balls:
+            old_row=iceball.get_row()
+            old_col=iceball.get_col()
+            shape=iceball.get_shape()
+            empty=np.ndarray(shape.shape,dtype='U50')
+            empty.fill(' ')
+            self.matrix[old_row:old_row+shape.shape[0],old_col:old_col+shape.shape[1]]=empty
+            if (old_col<self.strt_col) or (old_col>=self.col-10):
+                iceball_del=iceball
+                self.ice_balls.remove(iceball)
+                del iceball_del
+            else:
+                self.matrix[old_row:old_row+shape.shape[0],old_col:old_col+shape.shape[1]]=iceball.get_conc_obj()
+                iceball.set_conc_obj(self.matrix[old_row:old_row+shape.shape[0],old_col+ICEBALL_VEL_X:old_col+ICEBALL_VEL_X+shape.shape[1]])
+                self.matrix[old_row:old_row+shape.shape[0],old_col+ICEBALL_VEL_X:old_col+ICEBALL_VEL_X+shape.shape[1]]=shape
+                iceball.move(ICEBALL_VEL_X)
+
 
 if __name__ == "__main__":
     Board = Board(30,160,160)

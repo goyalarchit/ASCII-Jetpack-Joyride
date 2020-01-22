@@ -112,9 +112,9 @@ b.create_board()
 create_arena(b)
 player=Mando(0,2)
 b.spawn_mando(player)
-Bossenemy = BossEnemy(0,b.col-50)
+Bossenemy = BossEnemy(0,b.col-51)
 b.spwan_boss_enemy_to_arena(Bossenemy)
-Baby_yoda=Yoda(b.row-4,b.col-11)
+Baby_yoda=Yoda(b.row-5,b.col-11)
 b.spwan_captured_baby_yoda_to_arena(Baby_yoda)
 vel_x=1
 while True :
@@ -127,6 +127,7 @@ while True :
     signal.alarm(TIMEOUT)
     gameplay()
     b.simulate_bullet_motion(Bossenemy)
+    b.simulate_iceball_motion()
     b.magnet_action(player)
     signal.alarm(0)
     if(b.end_col==b.col):

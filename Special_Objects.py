@@ -83,3 +83,22 @@ class Firebeams(Spec_objs):
         random.seed(time.time())
         fin_shape=shape_np[random.randint(0,106)%shape_np.shape[0]]
         super().__init__(row,col,fin_shape)
+
+
+class IceBall(Spec_objs):
+    def __init__(self,row,col):
+        shape=TextASCII_to_ndarray('./ice_balls.txt')
+        empty=np.ndarray(shape.shape,dtype='U50')
+        empty.fill(' ')
+        super().__init__(row,col,shape)
+        self.__cncld_obj=empty
+    
+    def move(self,vel):
+        self._col+=vel
+    
+    def set_conc_obj(self,a):
+        self.__cncld_obj=a
+
+    def get_conc_obj(self):
+        return self.__cncld_obj
+
