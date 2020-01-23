@@ -154,7 +154,7 @@ while True :
     # sys.stdout.flush()
     # signal.alarm(TIMEOUT)
     gameplay()
-    b.simulate_bullet_motion(Bossenemy)
+    b.simulate_bullet_motion(Bossenemy,int(player.get_speedboost()))
     b.simulate_iceball_motion()
     b.magnet_action(player)
     # signal.alarm(0)

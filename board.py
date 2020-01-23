@@ -82,11 +82,11 @@ class Board:
         self.__bullets.append(Bullet(row,col))
 
 
-    def simulate_bullet_motion(self,bossenemy):
+    def simulate_bullet_motion(self,bossenemy,speedboost):
          
         empty=np.ndarray([5,5],dtype='U50')
         empty.fill(' ')
-        BULLET_VEL_X=2
+        BULLET_VEL_X=2+speedboost
         for bullet in self.__bullets:
             old_row=bullet.get_row()
             old_col=bullet.get_col()
