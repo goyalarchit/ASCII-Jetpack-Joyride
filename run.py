@@ -158,7 +158,7 @@ while True :
     b.simulate_iceball_motion()
     b.magnet_action(player)
     # signal.alarm(0)
-    if(b.get_board_end_col()==b.get_board_col_size()):
+    if(b.get_board_end_col()==b.get_board_col_size()-1):
         vel_x=0
     player.move(vel_x+int(player.get_speedboost()),int(player.get_vel_y()),b)
     if Bossenemy.is_dead() is True:

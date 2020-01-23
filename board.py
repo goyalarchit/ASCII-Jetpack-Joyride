@@ -62,7 +62,7 @@ class Board:
                 else:
                     os.write(1,str.encode(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK))
             os.write(1,str.encode('\n'))
-        if self.__end_col<=self.__col-1 :
+        if self.__end_col+speedboost<self.__col-1 :
             self.__strt_col+=1+speedboost
             self.__end_col+=1+speedboost
             for i in range(self.__row):

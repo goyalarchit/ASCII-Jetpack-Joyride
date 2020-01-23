@@ -54,7 +54,7 @@ class Mando(Person):
 
     def move(self,dx,dy,board_obj):
         if self.__speedboost!=0:
-            if time.time() - self.__speedboost_st > 10:
+            if (time.time() - self.__speedboost_st > 10) or (board_obj.get_board_end_col()==board_obj.get_board_col_size()-1):
                 self.__speedboost=0
         empty=np.ndarray([3,3],dtype='U50')
         empty.fill(' ')
