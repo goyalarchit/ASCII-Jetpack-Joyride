@@ -48,13 +48,13 @@ if w is press set v_y=0 and on other cases
 empty=np.ndarray([5,5],dtype='U50')
         empty.fill(' ')
         BULLET_VEL_X=5
-        for bullet in self.bullets:
+        for bullet in self.__bullets:
             old_row=bullet.get_row()
             old_col=bullet.get_col()
             if old_col>=self.end_col-1:
                 self.matrix[old_row,old_col]=' '
                 bul_del=bullet
-                self.bullets.remove(bullet)
+                self.__bullets.remove(bullet)
                 del bul_del
             else:
                 for x in range(1,BULLET_VEL_X+1):
@@ -63,7 +63,7 @@ empty=np.ndarray([5,5],dtype='U50')
                         print(col_cell)
                         self.matrix[int(col_cell[0]):int(col_cell[0])+5,int(col_cell[1]):int(col_cell[1])+5] = empty
                         bul_del=bullet
-                        self.bullets.remove(bullet)
+                        self.__bullets.remove(bullet)
                         del bul_del
                         break;
                 else:   
@@ -76,13 +76,13 @@ empty=np.ndarray([5,5],dtype='U50')
                         bullet.set_col(old_col+BULLET_VEL_X)
 '''
 
-# cnt=0
-# chararray=[]
-# with open("./boss enemy") as obj:
-#     for text in obj:
-#         cnt+=1
-#         line=text.strip('\n')
-#         print(list(line))
+cnt=0
+chararray=[]
+with open("./ASCII_ART/finish.txt") as obj:
+    for text in obj:
+        cnt+=1
+        line=text.strip('\n')
+        print(line)
 #         chararray.append(list(line))
 # print(chararray)
 # max_len = np.array([len(array) for array in chararray]).max()

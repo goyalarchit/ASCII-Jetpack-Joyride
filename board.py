@@ -6,49 +6,65 @@ from Special_Objects import Bullet,Magnet,IceBall,SpeedBoost,Coins,Firebeam,Clou
 class Board:
 
     def __init__(self,row,col,frame_size):
-        self.row=row
-        self.col=col
-        self.strt_col=0
-        self.end_col=frame_size
+        self.__row=row
+        self.__col=col
+        self.__strt_col=0
+        self.__end_col=frame_size
         self.matrix=np.ndarray((row,col),dtype='U50')
-        self.frame_size=frame_size
+        self.__frame_size=frame_size
         self.__objectmatrix=np.ndarray((row,col),dtype='U10')
-        self.bullets=[]
-        self.magnets=[]
-        self.ice_balls=[]
-        self.coins=[]
-        self.firebeams=[]
-        self.clouds=[]
-        self.speedboosts=[]
+        self.__bullets=[]
+        self.__magnets=[]
+        self.__ice_balls=[]
+        self.__coins=[]
+        self.__firebeams=[]
+        self.__clouds=[]
+        self.__speedboosts=[]
     
+    def get_frame_size(self):
+        return self.__frame_size
+
+    def get_board_row_size(self):
+        return self.__row    
+
+    def get_board_col_size(self):
+        return self.__col
+
+    def get_board_strt_col(self):
+        return self.__strt_col 
+
+    def get_board_end_col(self):
+        return self.__end_col 
+
+
     def create_board(self):
         self.matrix.fill(' ')
         self.__objectmatrix.fill('0,0')
-        print(self.__objectmatrix)
+        # print(self.__objectmatrix)
 
     
     def print_grid(self,speedboost):
-        for i in range(self.row):
-            for j in range(self.strt_col,self.end_col):
-                if i<self.row-2:
+        for i in range(self.__row):
+            for j in range(self.__strt_col,self.__end_col):
+                if i<self.__row-2:
                     if self.matrix[i][j]=='$':
-                        print(Back.LIGHTBLUE_EX+Fore.LIGHTYELLOW_EX+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
-                    elif (self.matrix[i][j]=='*' or self.matrix[i][j]=='O') and j < self.col-self.frame_size:
-                        print(Back.LIGHTBLUE_EX+Fore.MAGENTA+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+Fore.LIGHTYELLOW_EX+self.matrix[i][j]+Back.BLACK+Fore.RESET))
+                    elif (self.matrix[i][j]=='*' or self.matrix[i][j]=='O') and j < self.__col-self.__frame_size:
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+Fore.RED+self.matrix[i][j]+Back.BLACK+Fore.RESET))
                     elif self.matrix[i][j]=='N':
-                        print(Back.LIGHTBLUE_EX+Fore.RED+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+Fore.RED+self.matrix[i][j]+Back.BLACK+Fore.RESET))
                     elif self.matrix[i][j]=='S':
-                        print(Back.LIGHTBLUE_EX+Fore.BLUE+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+Fore.BLUE+self.matrix[i][j]+Back.BLACK+Fore.RESET))
                     elif self.matrix[i][j]=='#':
-                        print(Back.LIGHTBLUE_EX+Fore.BLACK+self.matrix[i][j]+Back.BLACK+Fore.RESET, end="")
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+Fore.BLACK+self.matrix[i][j]+Back.BLACK+Fore.RESET))
                     else:
-                        print(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK, end="")
+                        os.write(1,str.encode(Back.LIGHTBLUE_EX+self.matrix[i][j]+Back.BLACK))
                 else:
-                    print(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK, end="")
-            print()
-        if self.end_col<=self.col-1 :
-            self.strt_col+=1+speedboost
-            self.end_col+=1+speedboost
+                    os.write(1,str.encode(Back.LIGHTGREEN_EX+self.matrix[i][j]+Back.BLACK))
+            os.write(1,str.encode('\n'))
+        if self.__end_col<=self.__col-1 :
+            self.__strt_col+=1+speedboost
+            self.__end_col+=1+speedboost
         # print(self.matrix)
 
     def set_objmatrix(self,s_row,s_col,shape):
@@ -63,7 +79,7 @@ class Board:
 
 #jump higher
     def add_bullet_to_arena(self,row,col):
-        self.bullets.append(Bullet(row,col))
+        self.__bullets.append(Bullet(row,col))
 
 
     def simulate_bullet_motion(self,bossenemy):
@@ -71,14 +87,14 @@ class Board:
         empty=np.ndarray([5,5],dtype='U50')
         empty.fill(' ')
         BULLET_VEL_X=2
-        for bullet in self.bullets:
+        for bullet in self.__bullets:
             old_row=bullet.get_row()
             old_col=bullet.get_col()
             self.matrix[old_row,old_col]=' '
-            if (old_col>=self.end_col-1) or (old_col>=self.col-30):
+            if (old_col>=self.__end_col-4) or (old_col>=self.__col-30):
                 self.matrix[old_row,old_col]=' '                
                 bul_del=bullet
-                self.bullets.remove(bullet)
+                self.__bullets.remove(bullet)
                 del bul_del
             else:
                 for x in range(1,BULLET_VEL_X+1):
@@ -86,7 +102,7 @@ class Board:
                         col_cell=self.get_objmatrix(old_row,old_col+x)
                         self.matrix[int(col_cell[0]):int(col_cell[0])+5,int(col_cell[1]):int(col_cell[1])+5] = empty
                         bul_del=bullet
-                        self.bullets.remove(bullet)
+                        self.__bullets.remove(bullet)
                         del bul_del
                         break
                     elif self.matrix[old_row,old_col+x ] in ['l','<','(','@','\''] :
@@ -94,7 +110,7 @@ class Board:
                         if bossenemy.get_lives()==0:
                             bossenemy.died()
                         bul_del=bullet
-                        self.bullets.remove(bullet)
+                        self.__bullets.remove(bullet)
                         del bul_del
                         break
                 else:
@@ -105,19 +121,23 @@ class Board:
 
                         
 
-        ###for bullet in self.bullets
+        ###for bullet in self.__bullets
         #check collision
         #if found remove buttet
         #else move bullet forward
     
     def add_magnet_to_arena(self,row,col):
-        self.magnets.append(Magnet(row,col))
-        shape=self.magnets[int(self.magnets.__len__())-1].get_shape()
+        self.__magnets.append(Magnet(row,col))
+        shape=self.__magnets[int(self.__magnets.__len__())-1].get_shape()
         self.matrix[row:row+shape.shape[0],col:col+shape.shape[1]]=shape
 
     def magnet_action(self,player):
-        for magnet in self.magnets:
-            if (magnet.get_col()>=self.strt_col) and (magnet.get_col()<=self.end_col):
+        for magnet in self.__magnets:
+            fig=magnet.get_shape()
+            mag_row=magnet.get_row()
+            mag_col=magnet.get_col()
+            self.matrix[mag_row:mag_row+fig.shape[0],mag_col:mag_col+fig.shape[1]]=fig
+            if (magnet.get_col()>=self.__strt_col) and (magnet.get_col()<=self.__end_col):
                 dx=int((magnet.get_col()-player.get_xcor())/4)
                 player.move(dx,0,self)
             else:
@@ -133,21 +153,21 @@ class Board:
 
 
     def add_iceball_to_arena(self,row,col):
-        self.ice_balls.append(IceBall(row,col))
+        self.__ice_balls.append(IceBall(row,col))
 
 
     def simulate_iceball_motion(self):
         ICEBALL_VEL_X=-3
-        for iceball in self.ice_balls:
+        for iceball in self.__ice_balls:
             old_row=iceball.get_row()
             old_col=iceball.get_col()
             shape=iceball.get_shape()
             empty=np.ndarray(shape.shape,dtype='U50')
             empty.fill(' ')
             self.matrix[old_row:old_row+shape.shape[0],old_col:old_col+shape.shape[1]]=empty
-            if (old_col<self.strt_col) or (old_col>=self.col-10):
+            if (old_col<self.__strt_col) or (old_col>=self.__col-10):
                 iceball_del=iceball
-                self.ice_balls.remove(iceball)
+                self.__ice_balls.remove(iceball)
                 del iceball_del
             else:
                 self.matrix[old_row:old_row+shape.shape[0],old_col:old_col+shape.shape[1]]=iceball.get_conc_obj()
@@ -157,7 +177,7 @@ class Board:
 
     def add_speedboost_to_arena(self,row,col):
         speedboost=SpeedBoost(row,col)
-        self.speedboosts.append(speedboost)
+        self.__speedboosts.append(speedboost)
         fig=speedboost.get_shape()
         try : 
             self.set_objmatrix(row,col,fig.shape)
@@ -167,7 +187,7 @@ class Board:
 
     def add_cloud_to_arena(self,row,col):
         cloud=Cloud(row,col)
-        self.clouds.append(cloud)
+        self.__clouds.append(cloud)
         fig=cloud.get_shape()
         try : 
             self.set_objmatrix(row,col,fig.shape)
@@ -176,7 +196,7 @@ class Board:
             return 
     def add_coins_to_arena(self,row,col):
         coin=Coins(row,col)
-        self.coins.append(coin)
+        self.__coins.append(coin)
         fig=coin.get_shape()
         empty=np.ndarray([fig.shape[0],fig.shape[1]],dtype='U50')
         empty.fill(' ')
@@ -191,7 +211,7 @@ class Board:
 
     def add_firebeam_to_arena(self,row,col):
         firebeam=Firebeam(row,col)
-        self.firebeams.append(firebeam)
+        self.__firebeams.append(firebeam)
         fig=firebeam.get_shape()
         empty=np.ndarray([fig.shape[0],fig.shape[1]],dtype='U50')
         empty.fill(' ')

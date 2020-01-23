@@ -62,13 +62,13 @@ class Mando(Person):
         y_cor=self.get_ycor()
         if y_cor+dy<4 :
             dy=0
-        elif y_cor+dy+3>board_obj.row-2 and (y_cor< board_obj.row-5):
+        elif y_cor+dy+3>int(board_obj.get_board_row_size())-2 and (y_cor< int(board_obj.get_board_row_size())-5):
             dy=1
-        elif y_cor==board_obj.row-5 and dy >0:
+        elif y_cor==int(board_obj.get_board_row_size())-5 and dy >0:
             dy=0
-        if x_cor+dx<board_obj.strt_col :
-            self.set_xcor(board_obj.strt_col-x_cor)
-        if x_cor+dx+3>board_obj.end_col :
+        if x_cor+dx<int(board_obj.get_board_strt_col()) :
+            self.set_xcor(int(board_obj.get_board_strt_col())-x_cor)
+        if x_cor+dx+3>int(board_obj.get_board_end_col()) :
             dx=0
         self.shield_book_keeping()
         if self.check_collision(dx,dy,board_obj) is False:
@@ -93,8 +93,9 @@ class Mando(Person):
                         flag=True
                         self.dec_lives()
                         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
-                        self.set_xcor(board_obj.strt_col+5-x_cor)
+                        self.set_xcor(int(board_obj.get_board_strt_col())+5-x_cor)
                         self.set_ycor(5-y_cor)
+                        self.__vel_y=0
                         dx=dy=0
                         if self.get_lives() is 0:
                             self.died()
@@ -114,8 +115,9 @@ class Mando(Person):
                         flag=True
                         self.dec_lives()
                         board_obj.matrix[y_cor:y_cor+3,x_cor:x_cor+3]=empty
-                        self.set_xcor(board_obj.strt_col+5-x_cor)
+                        self.set_xcor(int(board_obj.get_board_strt_col())+5-x_cor)
                         self.set_ycor(5-y_cor)
+                        self.__vel_y=0
                         dx=dy=0
                         if self.get_lives() is 0:
                             self.died()

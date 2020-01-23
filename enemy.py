@@ -13,12 +13,12 @@ class BossEnemy(Person):
         self._y_cor=y
 
     def simulate_fight(self,player,board_obj):
-        if(board_obj.end_col<=self.get_xcor()):
+        if(int(board_obj.get_board_end_col())<=int(self.get_xcor())):
             return
         if self._lives>0:
             self.__cnt+=1
             shape=self.get_shape()
-            empty=np.ndarray((board_obj.row,shape.shape[1]),dtype='U50')
+            empty=np.ndarray((int(board_obj.get_board_row_size()),shape.shape[1]),dtype='U50')
             empty.fill(' ')
             x_cor=self.get_xcor()
             y_cor=self.get_ycor()

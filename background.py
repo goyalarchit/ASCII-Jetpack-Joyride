@@ -7,16 +7,16 @@ from Special_Objects import Cloud
 
 
 def create_arena(board_obj):
-    board_obj.add_magnet_to_arena(6,int(2*board_obj.col/3))
-    board_obj.add_speedboost_to_arena(18,int(board_obj.col/3))
+    board_obj.add_magnet_to_arena(6,int(2*board_obj.get_board_col_size()/3))
+    board_obj.add_speedboost_to_arena(18,int(board_obj.get_board_col_size()/3))
     s_col=0
-    while s_col<board_obj.col-70:
+    while s_col<int(board_obj.get_board_col_size())-70:
         board_obj.add_cloud_to_arena(int(0),s_col)
         s_col+=30
     row=[6,15,24]
     for i in range(3):
         s_col=0
-        while s_col<board_obj.col-board_obj.frame_size-20:
+        while s_col<int(board_obj.get_board_col_size())-int(board_obj.get_frame_size())-20:
             s_row=row[i] + random.randint(0,2)
             s_col+=random.randint(0,100)%30
             if random.randint(0,13)%2 == 0 :

@@ -16,6 +16,10 @@
 
         M - Fire Right
 
+        Q - Quit
+
+        P - Pause/Resume
+
         No BackGround Color – Mandalorian without shield
 
         Purple Backgroud Color – Mandalorian with shield
@@ -37,3 +41,7 @@
 - Different Appearence of Mandalorian
 - Can change the resolution of screen
 - Can change the length of the Arena
+
+
+**Note:-**
+- KEEP CAPS LOCK OFF DURING GAME
