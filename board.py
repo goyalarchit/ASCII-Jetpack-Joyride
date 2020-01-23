@@ -67,8 +67,11 @@ class Board:
             self.__end_col+=1+speedboost
             for i in range(self.__row):
                 for j in range(self.__end_col-1-speedboost,self.__end_col):
-                    if self.matrix[i][j]==u'\U00002022':
-                        self.matrix[i][j]=' '
+                    try:
+                        if self.matrix[i][j]==u'\U00002022':
+                            self.matrix[i][j]=' '
+                    except:
+                        return
         # print(self.matrix)
 
     def set_objmatrix(self,s_row,s_col,shape):
