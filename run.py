@@ -146,7 +146,7 @@ while True :
     os.write(1,str.encode('\033[0;0H'))
     remaining_time-=1 #int(time.time())-int(strt_time)
     os.write(1,str.encode(Back.BLACK+"Coins : "+str(player.get_coins())+'\t\t\t\t\t\t\t\t\t\t\t\t\t'))
-    os.write(1,str.encode(Back.BLACK+"Time : "+str(remaining_time)+'\n'))
+    os.write(1,str.encode(Back.BLACK+"Time : %4d" % (remaining_time)+'\n'))
     os.write(1,str.encode(Back.BLACK+"Your Lives : "+str(player.get_lives())+'\t\t\t\t\t\t\t\t\t\t\t\t\t'))
     os.write(1,str.encode(Back.BLACK+"Boss Enemy Lives : "+str(Bossenemy.get_lives())+'\n'))
     b.print_grid(int(player.get_speedboost()))

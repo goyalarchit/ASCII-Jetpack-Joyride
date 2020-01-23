@@ -65,6 +65,10 @@ class Board:
         if self.__end_col<=self.__col-1 :
             self.__strt_col+=1+speedboost
             self.__end_col+=1+speedboost
+            for i in range(self.__row):
+                for j in range(self.__end_col-1-speedboost,self.__end_col):
+                    if self.matrix[i][j]==u'\U00002022':
+                        self.matrix[i][j]=' '
         # print(self.matrix)
 
     def set_objmatrix(self,s_row,s_col,shape):
@@ -79,7 +83,9 @@ class Board:
 
 #jump higher
     def add_bullet_to_arena(self,row,col):
-        self.__bullets.append(Bullet(row,col))
+        bullet=Bullet(row,col)
+        self.__bullets.append(bullet)
+        self.matrix[row,col]=bullet.get_shape()
 
 
     def simulate_bullet_motion(self,bossenemy,speedboost):
@@ -91,7 +97,7 @@ class Board:
             old_row=bullet.get_row()
             old_col=bullet.get_col()
             self.matrix[old_row,old_col]=' '
-            if (old_col>=self.__end_col-4) or (old_col>=self.__col-30):
+            if (old_col>=self.__end_col-1-speedboost) or (old_col>=self.__col-30):
                 self.matrix[old_row,old_col]=' '                
                 bul_del=bullet
                 self.__bullets.remove(bullet)
@@ -114,7 +120,8 @@ class Board:
                         del bul_del
                         break
                 else:
-                    self.matrix[old_row,old_col]=bullet.get_conc_obj()
+                    if np.array_equal(bullet.get_conc_obj(), bullet.get_shape()) is False:
+                        self.matrix[old_row,old_col]=bullet.get_conc_obj()
                     bullet.set_conc_obj(self.matrix[old_row,old_col+BULLET_VEL_X])
                     self.matrix[old_row,old_col+BULLET_VEL_X]=bullet.get_shape()
                     bullet.move(BULLET_VEL_X)
@@ -138,7 +145,12 @@ class Board:
             mag_col=magnet.get_col()
             self.matrix[mag_row:mag_row+fig.shape[0],mag_col:mag_col+fig.shape[1]]=fig
             if (magnet.get_col()>=self.__strt_col) and (magnet.get_col()<=self.__end_col):
-                dx=int((magnet.get_col()-player.get_xcor())/4)
+                if (magnet.get_col()-player.get_xcor())>0:
+                    dx=4
+                elif (magnet.get_col()-player.get_xcor()) < 0 :
+                    dx=-4
+                else:
+                    dx=0
                 player.move(dx,0,self)
             else:
                 pass
