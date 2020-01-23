@@ -45,3 +45,4 @@
 
 **Note:-**
 - KEEP CAPS LOCK OFF DURING GAME
+- Video of the Game : ./2020-01-23 19-32-26.mkv
